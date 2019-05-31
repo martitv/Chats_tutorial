@@ -9,7 +9,7 @@ import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
-import {CTX} from "./Store";
+import { CTX } from "./Store";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,13 +42,13 @@ export default function Dashboard() {
   const classes = useStyles();
 
   // CTX store
-  const [allChats] = React.useContext(CTX);
-
+  const {allChats, sendChatAction, user} = React.useContext(CTX);
   const topics = Object.keys(allChats);
 
   // local state
   const [activeTopic, changeActiveTopic] = React.useState(topics[0]);
   const [textValue, changeTextValue] = React.useState("");
+
   return (
     <div>
       <Paper className={classes.root}>
@@ -62,7 +62,11 @@ export default function Dashboard() {
           <div className={classes.topicsWindow}>
             <List>
               {topics.map(topic => (
-                <ListItem onClick={e => changeActiveTopic(e.target.innerText)} key={topic} button>
+                <ListItem
+                  onClick={e => changeActiveTopic(e.target.innerText)}
+                  key={topic}
+                  button
+                >
                   <ListItemText primary={topic} />
                 </ListItem>
               ))}
@@ -90,6 +94,10 @@ export default function Dashboard() {
             variant="contained"
             color="primary"
             className={classes.button}
+            onClick={() => {
+              sendChatAction({from: user, msg: textValue, topic: activeTopic});
+              changeTextValue('');
+            }}
           >
             Send
           </Button>
