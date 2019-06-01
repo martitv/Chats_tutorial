@@ -21,8 +21,9 @@ const useStyles = makeStyles(theme => ({
     alignItems: "center"
   },
   topicsWindow: {
-    width: "30%",
+    width: "6em",
     height: "300px",
+    paddingRight: "1em",
     borderRight: "1px solid grey"
   },
   chatWindow: {
@@ -42,12 +43,17 @@ export default function Dashboard() {
   const classes = useStyles();
 
   // CTX store
-  const {allChats, sendChatAction, user} = React.useContext(CTX);
+  const { allChats, sendChatAction, user } = React.useContext(CTX);
   const topics = Object.keys(allChats);
 
   // local state
   const [activeTopic, changeActiveTopic] = React.useState(topics[0]);
   const [textValue, changeTextValue] = React.useState("");
+
+  function sendMessage() {
+    sendChatAction({ from: user, msg: textValue, topic: activeTopic });
+    changeTextValue("");
+  }
 
   return (
     <div>
@@ -63,6 +69,7 @@ export default function Dashboard() {
             <List>
               {topics.map(topic => (
                 <ListItem
+                  selected={activeTopic === topic ? 1 : 0}
                   onClick={e => changeActiveTopic(e.target.innerText)}
                   key={topic}
                   button
@@ -89,15 +96,13 @@ export default function Dashboard() {
             className={classes.chatBox}
             value={textValue}
             onChange={e => changeTextValue(e.target.value)}
+            onKeyPress={e => (e.key === "Enter" ? sendMessage() : "")}
           />
           <Button
             variant="contained"
             color="primary"
             className={classes.button}
-            onClick={() => {
-              sendChatAction({from: user, msg: textValue, topic: activeTopic});
-              changeTextValue('');
-            }}
+            onClick={sendMessage}
           >
             Send
           </Button>

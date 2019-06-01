@@ -23,12 +23,12 @@ export const CTX = React.createContext();
 */
 
 const initialState = {
-  general: [
+  General: [
     { from: "Martin", msg: "Hei!" },
     { from: "Other Martin", msg: "Yawo bruther.." },
     { from: "Martin", msg: "Okay then" }
   ],
-  topic2: [
+  Random: [
     { from: "Roger", msg: "Hei!" },
     { from: "Gunnar", msg: "Hallo!" },
     { from: "Berit", msg: "God dag!" }
